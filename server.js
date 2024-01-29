@@ -28,7 +28,7 @@ let db = mysql.createConnection({
 app.post("/login", (req, res) => {
   const sql = 'SELECT * FROM users WHERE email =?';
   db.query(sql, [req.body.email], (err, data) => {
-    if (err) return res.json({ Error: "server side error" });
+    if (err) return res.json({ Error: err });
 
     if (data.length > 0) {
 bcrypt.compare(req.body.password.toString(),data[0].password,(err,response)=>{
