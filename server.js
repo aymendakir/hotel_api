@@ -11,11 +11,12 @@ let app = Express();
 app.use(Express.json());
 app.use(
   cors({
-    origin: "http://localhost:3000",
-    methods: ["GET,POST,PUT,OPTION"],
-    credentials: true,
+      origin: ['http://localhost:3000'],
+      credentials: true,
+      methods: ["GET", "POST", "PUT", "DELETE"],
   })
 );
+
 app.use(cookieParser())
 let db = mysql.createConnection({
   host: "localhost",
@@ -42,14 +43,15 @@ bcrypt.compare(req.body.password.toString(),data[0].password,(err,response)=>{
         return res.json({ Status: "success" });
     }
     else {
-        return res.json({ Error: "password not match" });
+        return res.json({ Error: "Invalid Email or Password" });
 
     }
 })
 
 
     } else {
-      return res.status(401).send("Invalid Email or Password");
+        return res.json({ Error: "Invalid Email or Password" });
+
     }
   });
 });
@@ -87,12 +89,14 @@ bcrypt.hash(req.body.password,10,(err,hash)=>{
 
     ]
     db.query(sql,[values],(err, result)=>{
-        if (err) return res.json({Error:err})
+        if (err) return res.json({ Error: "Invalid Email or Password" });
 
         return res.json({Status:"grewart"})
 
     })
 })
+
+
 
 })
 app.get("/logout",(req,res)=>{
