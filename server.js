@@ -19,17 +19,17 @@ app.use(
 
 app.use(cookieParser())
 let db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "laravel",
+ host: process.env.DB_HOST,
+    user: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_DBNAME,
 });
 
 
 app.post("/login", (req, res) => {
   const sql = 'SELECT * FROM users WHERE email =?';
   db.query(sql, [req.body.email], (err, data) => {
-    if (err) return res.json({ Error: "server side error" });
+    if (err) return res.json({ Error: err });
 
     if (data.length > 0) {
 bcrypt.compare(req.body.password.toString(),data[0].password,(err,response)=>{
